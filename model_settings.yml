@@ -1,10 +1,5 @@
 env_prefix: UT
 model:
-  # check required
-  bool_required:
-    help: This is an integer setting
-    required: True
-    example: True
   # default values
   bool_default:
     default: False

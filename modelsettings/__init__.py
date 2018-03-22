@@ -177,11 +177,15 @@ class ModelSettings(object):
     def check_required(self):
         """ Check all required settings have been provided
         """
+        die = False
         for key, value in self.spec.items():
             if not getattr(self, key.upper()) and value['required']:
                 print(f"{key} is a required setting. "
                       "Set via command-line params, env or file. "
                       "For examples, try '--generate' or '--help'.")
+                die = True
+        if die:
+            sys.exit(1)
 
     def generate(self):
         """ Generate sample settings
@@ -200,6 +204,8 @@ class ModelSettings(object):
                 self.generate_ini()
             elif otype == 'kubernetes':
                 self.generate_kubernetes()
+        sys.exit(0)
+
 
     def generate_env(self):
         """ Generate sample environment variables
@@ -233,7 +239,11 @@ class ModelSettings(object):
         example = []
         example.append("docker run -it")
         for key in sorted(list(self.spec.keys())):
-            string = f"     -e {self.env_prefix}_{key.upper()}={self.spec[key].get('example', '')}"
+            if self.spec[key]['type'] in (dict, list):
+                value = f"\'{json.dumps(self.spec[key].get('example', ''))}\'"
+            else:
+                value = f"{self.spec[key].get('example', '')}"
+            string = f"     -e {self.env_prefix}_{key.upper()}={value}"
             example.append(string)
         example.append("     <container-name>")
         print(" \\\n".join(example))

@@ -236,70 +236,76 @@ class TestHardwareController(unittest.TestCase):
         """
         Test GENERATE_ENV
         """
-        testargs = ["--generate", 'env']
-        sys.argv[1:] = testargs
-        for entry in output.getvalue().splitlines():
-            os.system(entry)
-        importlib.reload(modelsettings)
-        self.assertEqual(len(output.getvalue().splitlines()), 25, output.getvalue())
+        with self.assertRaises(SystemExit):
+            testargs = ["--generate", 'env']
+            sys.argv[1:] = testargs
+            for entry in output.getvalue().splitlines():
+                os.system(entry)
+            importlib.reload(modelsettings)
+            self.assertEqual(len(output.getvalue().splitlines()), 24, output.getvalue())
 
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_generate_ini(self, output):
         """
         Test GENERATE_INI
         """
-        testargs = ["--generate", 'ini']
-        sys.argv[1:] = testargs
-        importlib.reload(modelsettings)
-        self.assertEqual(len(output.getvalue().splitlines()), 26, output.getvalue())
+        with self.assertRaises(SystemExit):
+            testargs = ["--generate", 'ini']
+            sys.argv[1:] = testargs
+            importlib.reload(modelsettings)
+            self.assertEqual(len(output.getvalue().splitlines()), 25, output.getvalue())
 
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_generate_command(self, output):
         """
         Test GENERATE_COMMAND
         """
-        testargs = ["--generate", 'command']
-        sys.argv[1:] = testargs
-        importlib.reload(modelsettings)
-        self.assertEqual(len(output.getvalue().splitlines()), 26, output.getvalue())
+        with self.assertRaises(SystemExit):
+            testargs = ["--generate", 'command']
+            sys.argv[1:] = testargs
+            importlib.reload(modelsettings)
+            self.assertEqual(len(output.getvalue().splitlines()), 25, output.getvalue())
 
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_generate_docker_run(self, output):
         """
         Test GENERATE_DOCKER_RUN
         """
-        testargs = ["--generate", 'docker-run']
-        sys.argv[1:] = testargs
-        importlib.reload(modelsettings)
-        self.assertEqual(len(output.getvalue().splitlines()), 27, output.getvalue())
+        with self.assertRaises(SystemExit):
+            testargs = ["--generate", 'docker-run']
+            sys.argv[1:] = testargs
+            importlib.reload(modelsettings)
+            self.assertEqual(len(output.getvalue().splitlines()), 26, output.getvalue())
 
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_generate_docker_compose(self, output):
         """
         Test GENERATE_DOCKER_COMPOSE
         """
-        testargs = ["--generate", 'docker-compose']
-        sys.argv[1:] = testargs
-        importlib.reload(modelsettings)
-        dikt = yaml.load(output.getvalue())
-        for entry in dikt['app']['environment']:
-            os.system(f"export {entry}")
-        importlib.reload(modelsettings)
-        self.assertEqual(len(output.getvalue().splitlines()), 56, output.getvalue())
+        with self.assertRaises(SystemExit):
+            testargs = ["--generate", 'docker-compose']
+            sys.argv[1:] = testargs
+            importlib.reload(modelsettings)
+            dikt = yaml.load(output.getvalue())
+            for entry in dikt['app']['environment']:
+                os.system(f"export {entry}")
+            importlib.reload(modelsettings)
+            self.assertEqual(len(output.getvalue().splitlines()), 54, output.getvalue())
 
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_generate_kubernetes(self, output):
         """
         Test GENERATE_KUBERNETES
         """
-        testargs = ["--generate", 'kubernetes']
-        sys.argv[1:] = testargs
-        importlib.reload(modelsettings)
-        dikt = yaml.load(output.getvalue())
-        for value in dikt['spec']['containers'][0]['env']:
-            os.system(f"export {value['name']}={value['value']}")
-        importlib.reload(modelsettings)
-        self.assertEqual(len(output.getvalue().splitlines()), 112, output.getvalue())
+        with self.assertRaises(SystemExit):
+            testargs = ["--generate", 'kubernetes']
+            sys.argv[1:] = testargs
+            importlib.reload(modelsettings)
+            dikt = yaml.load(output.getvalue())
+            for value in dikt['spec']['containers'][0]['env']:
+                os.system(f"export {value['name']}={value['value']}")
+            importlib.reload(modelsettings)
+            self.assertEqual(len(output.getvalue().splitlines()), 108, output.getvalue())
 
     # test a required setting
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
@@ -307,10 +313,15 @@ class TestHardwareController(unittest.TestCase):
         """
         Test BOOL_REQUIRED
         """
-        testargs = []
-        sys.argv[1:] = testargs
-        importlib.reload(modelsettings)
-        self.assertIn("is a required setting", output.getvalue())
+        os.environ["MODEL_SETTINGS"] = "model_settings_br.yml"
+        with self.assertRaises(SystemExit):
+            importlib.reload(modelsettings)
+            self.assertIn("is a required setting", output.getvalue())
+        del os.environ["MODEL_SETTINGS"]
+        # testargs = []
+        # sys.argv[1:] = testargs
+        # importlib.reload(modelsettings)
+        # self.assertIn("is a required setting", output.getvalue())
 
     # test the hierarchy
     def test_env_overrides_ini(self):
@@ -356,7 +367,7 @@ class TestHardwareController(unittest.TestCase):
         with self.assertRaises(SystemExit):
             importlib.reload(modelsettings)
             self.assertIn("Error finding", output.getvalue())
-        
+
 
 if __name__ == '__main__':
     unittest.main()
