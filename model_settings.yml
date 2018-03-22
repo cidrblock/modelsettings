@@ -1,0 +1,155 @@
+env_prefix: UT
+model:
+  # check required
+  bool_required:
+    help: This is an integer setting
+    required: True
+    example: True
+  # default values
+  bool_default:
+    default: False
+    help: This is an integer setting
+    required: False
+    example: True
+  integer_default:
+    default: 60
+    help: This is an integer setting
+    required: False
+    example: 30
+  float_default:
+    default: 60.5
+    help: This is an integer setting
+    required: False
+    example: 30.5
+  string_default:
+    default: string
+    help: This is a string setting
+    required: False
+    example: string
+  dictionary_default:
+    default:
+      key: value
+    help: This is a dict setting
+    required: False
+    example:
+      key: value
+  list_default:
+    default:
+    - item1
+    - item2
+    help: This is a list setting
+    required: False
+    example:
+    - item1
+    - item2
+  # ini values
+  bool_ini:
+    default: False
+    help: This is an integer setting
+    required: False
+    example: True
+  integer_ini:
+    default: 60
+    help: This is an integer setting
+    required: False
+    example: 30
+  float_ini:
+    default: 60.5
+    help: This is an integer setting
+    required: False
+    example: 30.5
+  string_ini:
+    default: string
+    help: This is a string setting
+    required: False
+    example: string
+  dictionary_ini:
+    default:
+      key: value
+    help: This is a dict setting
+    required: False
+    example:
+      key: value
+  list_ini:
+    default:
+    - item1
+    - item2
+    help: This is a list setting
+    required: False
+    example:
+    - item1
+    - item2
+  # env values
+  bool_envar:
+    default: False
+    help: This is an integer setting
+    required: False
+    example: True
+  integer_envar:
+    default: 60
+    help: This is an integer setting
+    required: False
+    example: 30
+  float_envar:
+    default: 60.5
+    help: This is an integer setting
+    required: False
+    example: 30.5
+  string_envar:
+    default: string
+    help: This is a string setting
+    required: False
+    example: string
+  dictionary_envar:
+    default:
+      key: value
+    help: This is a dict setting
+    required: False
+    example:
+      key: value
+  list_envar:
+    default:
+    - item1
+    - item2
+    help: This is a list setting
+    required: False
+    example:
+    - item1
+    - item2
+
+  bool_command:
+    default: False
+    help: This is an integer setting
+    required: False
+    example: True
+  integer_command:
+    default: 60
+    help: This is an integer setting
+    required: False
+    example: 30
+  float_command:
+    default: 60.5
+    help: This is an integer setting
+    required: False
+    example: 30.5
+  string_command:
+    default: string
+    help: This is a string setting
+    required: False
+    example: string
+  dictionary_command:
+    default:
+      key: value
+    help: This is a dict setting
+    required: False
+    example:
+      key: value
+  list_command:
+    default:
+    - item1
+    - item2
+    help: This is a list setting
+    required: False
+    example:
+    - item1
+    - item2
