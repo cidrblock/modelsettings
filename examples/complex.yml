@@ -1,0 +1,18 @@
+env_prefix: RM
+model:
+  dictionary:
+    default:
+      key: value
+    help: This is a dict setting
+    required: False
+    example:
+      key: value
+  list:
+    default:
+    - item1
+    - item2
+    help: This is a list setting
+    required: False
+    example:
+    - item1
+    - item2

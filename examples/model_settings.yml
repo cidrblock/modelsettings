@@ -1,0 +1,27 @@
+env_prefix: CF
+model:
+  cream:
+    choices:
+    - True
+    - False
+    default: False
+    example: True
+    help: Would you like cream in your coffee?
+    required: False
+  sugar:
+    choices:
+    - True
+    - False
+    default: True
+    example: True
+    help: Would you like sugar in your coffee?
+    required: False
+  size:
+    choices:
+    - 10
+    - 12
+    - 16
+    default: 12
+    example: 16
+    help: What size cup would you like in ounces?
+    required: True
