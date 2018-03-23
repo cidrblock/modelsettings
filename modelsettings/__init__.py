@@ -135,7 +135,7 @@ class ModelSettings(object):
 
         """
         for key, value in vars(args).items():
-            if value:
+            if value is not None:
                 setattr(self, key.upper(), value)
 
     def load_ini(self, ini_file):
@@ -179,7 +179,7 @@ class ModelSettings(object):
         """
         die = False
         for key, value in self.spec.items():
-            if not getattr(self, key.upper()) and value['required']:
+            if getattr(self, key.upper()) is None and value['required'] is True:
                 print(f"{key} is a required setting. "
                       "Set via command-line params, env or file. "
                       "For examples, try '--generate' or '--help'.")
