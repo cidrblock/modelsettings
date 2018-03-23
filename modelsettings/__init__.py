@@ -104,7 +104,7 @@ class ModelSettings(object):
                                 formatter_class=RawTextHelpFormatter)
         parser.add_argument("--generate", action="store", dest='generate',
                             choices=['command', 'docker-run', 'docker-compose',
-                                     'ini', 'env', 'kubernetes'],
+                                     'ini', 'env', 'kubernetes', 'readme', 'drone-plugin'],
                             help="Generate a template ")
         parser.add_argument("--settings", action="store", dest='settings',
                             help="Specify a settings file. (ie settings.dev)")
@@ -200,10 +200,15 @@ class ModelSettings(object):
                 self.generate_docker_run()
             elif otype == "docker-compose":
                 self.generate_docker_compose()
+            elif otype == "kubernetes":
+                self.generate_kubernetes()
             elif otype == 'ini':
                 self.generate_ini()
-            elif otype == 'kubernetes':
-                self.generate_kubernetes()
+            elif otype == 'readme':
+                self.generate_readme()
+            elif otype == 'drone-plugin':
+                self.generate_drone_plugin()
+
         sys.exit(0)
 
 
@@ -291,5 +296,53 @@ class ModelSettings(object):
             entry = {"name": f"{self.env_prefix}_{key.upper()}", "value": kvalue}
             example['spec']['containers'][0]['env'].append(entry)
         print(yaml.dump(example, default_flow_style=False))
+
+    def generate_drone_plugin(self):
+        """ Generate a sample drone plugin configuration
+        """
+        example = {}
+        example['pipeline'] = {}
+        example['pipeline']['appname'] = {}
+        example['pipeline']['appname']['image'] = ""
+        example['pipeline']['appname']['secrets'] = ""
+        for key, value in self.spec.items():
+            if value['type'] in (dict, list):
+                kvalue = f"\'{json.dumps(value.get('example', ''))}\'"
+            else:
+                kvalue = f"{value.get('example', '')}"
+            example['pipeline']['appname'][key.lower()] = kvalue
+        print(yaml.dump(example, default_flow_style=False))
+
+    def generate_readme(self):
+        """ Generate a readme with all the generators
+        """
+        print("## Examples of settings runtime params")
+        print("### Command-line parameters")
+        print("```")
+        self.generate_command()
+        print("```")
+        print("###  Environment variables")
+        print("```")
+        self.generate_env()
+        print("```")
+        print("###  ini file")
+        print("```")
+        self.generate_ini()
+        print("```")
+        print("###  docker run")
+        print("```")
+        self.generate_docker_run()
+        print("```")
+        print("###  docker compose")
+        print("```")
+        self.generate_docker_compose()
+        print("```")
+        print("###  kubernetes")
+        print("```")
+        self.generate_kubernetes()
+        print("```")
+
+
+
 
 settings = ModelSettings()
