@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='modelsettings',
-      version='1.6.2',
+      version='1.6.3',
       description='Model your application settings.',
       url='http://github.com/cidrblock/modelsettings',
       author='Bradley A. Thornton',
