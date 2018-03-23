@@ -154,11 +154,11 @@ class ModelSettings(object):
         if ini_file and not os.path.exists(ini_file):
             self.log.critical(f"Settings file specified but not found. {ini_file}")
             sys.exit(1)
-        else:
+        if not ini_file:
             ini_file = f"{self.cwd}/settings.ini"
-        if  os.path.exists(ini_file):
+        if os.path.exists(ini_file):
             config = configparser.RawConfigParser(allow_no_value=True)
-            config.read('settings.ini')
+            config.read(ini_file)
             for key, value in self.spec.items():
                 entry = None
                 if value['type'] == str:
@@ -177,7 +177,7 @@ class ModelSettings(object):
                         except json.decoder.JSONDecodeError as _err:  #pragma: no cover
                             self.log.critical(f"Error parsing json from ini file. {entries}")
                             sys.exit(1)
-                if entry:
+                if entry is not None:
                     setattr(self, key.upper(), entry)
 
     def check_required(self):

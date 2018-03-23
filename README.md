@@ -86,7 +86,9 @@ if __name__ == "__main__":
 ```
 All settings are converted to uppercase and available as `settings.XXXXX`
 
-### Command-line help
+## Additional command-line parameters
+
+### `--help`
 
 Argparse help is generated from the model:
 
@@ -105,4 +107,139 @@ optional arguments:
   --cream {True,False}  Would you like cream in your coffee? e.g., True
   --sugar {True,False}  Would you like sugar in your coffee? e.g., True
   --size {10,12,16}     What size cup would you like in ounces? e.g., 16
+```
+
+### `--generate`
+
+A command-line paramter of generate is added to the application which, when used, will generate sample settings in a number of formats.
+
+```
+$ python app.py --generate env
+export CF_CREAM=True
+export CF_SIZE=16
+export CF_SUGAR=True
+```
+
+### `--generate readme`
+
+Markdown can be generated which includes all the available generate formats.
+
+```
+$ python app.py --generate readme >> README.md
+```
+## Order of operations
+
+The .ini file is read first, then the environment variables, then the command-line parameters.
+
+### .ini file support
+
+The application will now support loading settings from a `settings.ini` file.
+
+```
+$ cat settings.ini
+[settings]
+cream=True
+size=16
+sugar=True
+$ python app.py
+You ordered a 16 oz. cup of coffee with cream and sugar.
+```
+An alternate settings file can be specified with the command line, this is useful during development of the application.
+
+```
+$ cat settings.dev
+[settings]
+cream=True
+size=10
+sugar=False
+$ python app.py --settings settings.dev
+You ordered a 10 oz. cup of coffee with cream.
+$ python app.py --settings settings.dev --size 16
+You ordered a 16 oz. cup of coffee with cream.
+```
+
+### Environment variable support
+
+All settings can be stored as environment variables.  The environment variables should be prefaced with the `env_prefix` from the `model_settings.yml` file and capitalized.
+
+```
+$ export CF_CREAM=False
+$ export CF_SIZE=12
+$ export CF_SUGAR=True
+$ python app.py
+You ordered a 12 oz. cup of coffee with sugar.
+$ export CF_CREAM=True
+$ python app.py
+You ordered a 12 oz. cup of coffee with cream and sugar.
+```
+
+### Command-line parameter support
+
+Command line parameters take precedence over `.ini` files and environment variables.
+
+```
+$ python app.py --size 10 --sugar False --cream False
+You ordered a 10 oz. cup of coffee.
+$ python app.py --size 12 --sugar True --cream False
+You ordered a 12 oz. cup of coffee with sugar.
+$ python app.py --size 16 --sugar True --cream True
+You ordered a 16 oz. cup of coffee with cream and sugar.
+```
+
+## model_settings.yml
+
+1) The model support 5 basic python types:
+  - `bool`
+  - `int`
+  - `float`
+  - `string`
+  - `list`
+  - `dict`
+
+The type is derived from the example given, and the settings variable is cast to that type.
+
+In the example below, each supported type is shown with a corresponding yaml native example.
+
+`example` is therefore a required property for every entry in the model.
+
+```
+bool:
+  choices:
+  - True
+  - False
+  default: False
+  help: This is an integer setting
+  required: False
+  example: True
+integer:
+  default: 60
+  help: This is an integer setting
+  required: False
+  example: 30
+float:
+  default: 60.5
+  help: This is an integer setting
+  required: False
+  example: 30.5
+string:
+  default: string
+  help: This is a string setting
+  required: False
+  example: string
+dictionary:
+  default:
+    key: value
+  help: This is a dict setting
+  required: False
+  example:
+    key: value
+list:
+  default:
+  - item1
+  - item2
+  help: This is a list setting
+  required: False
+  example:
+  - item1
+  - item2
 ```
