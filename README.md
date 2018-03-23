@@ -212,6 +212,9 @@ bool:
   required: False
   example: True
 integer:
+  choices:
+  - 10
+  - 20
   default: 60
   help: This is an integer setting
   required: False
@@ -242,4 +245,95 @@ list:
   example:
   - item1
   - item2
+```
+
+## Dictionaries and lists objects in `.ini` and environment variables.
+
+Dictionary and lists should be represented as json in `.ini` files and environment variables:
+
+```
+$ more complex.yml
+env_prefix: RM
+model:
+  dictionary:
+    default:
+      key: value
+    help: This is a dict setting
+    required: False
+    example:
+      key: value
+  list:
+    default:
+    - item1
+    - item2
+    help: This is a list setting
+    required: False
+    example:
+    - item1
+    - item2
+$ export MODEL_SETTINGS=complex.yml
+
+$ python app.py --generate env
+export RM_DICTIONARY='{"key": "value"}'
+export RM_LIST='["item1", "item2"]'
+
+$ python app.py --generate ini
+[settings]
+dictionary={"key": "value"}
+list=["item1", "item2"]
+```
+
+## Docker
+
+Because all settings are supported as environment variables, transitioning a python application to a docker container is simple.
+
+Dockerfile
+```
+FROM python:3.6.4-alpine
+
+RUN apk add -U \
+	ca-certificates \
+ && rm -rf /var/cache/apk/* \
+ && pip install --no-cache-dir --upgrade pip
+
+WORKDIR /usr/src/app/
+ADD model_settings.yml .
+ADD app.py .
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["python", "app.py"]
+```
+
+Build
+```
+$ docker build -t coffee .
+<...>
+Successfully built 74938ac5902a
+Successfully tagged coffee:latest
+```
+Generate
+```
+$ python app.py --generate docker-run
+docker run -it \
+     -e CF_CREAM=True \
+     -e CF_SIZE=16 \
+     -e CF_SUGAR=True \
+     <container-name>
+```
+Run
+```
+$ docker run -it \
+     -e CF_CREAM=True \
+     -e CF_SIZE=16 \
+     -e CF_SUGAR=True \
+     coffee
+You ordered a 16 oz. cup of coffee with cream and sugar.
+
+$ docker run -it \
+     -e CF_CREAM=False \
+     -e CF_SIZE=12 \
+     -e CF_SUGAR=True \
+     coffee
+You ordered a 12 oz. cup of coffee with sugar.  
 ```
