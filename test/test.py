@@ -320,7 +320,7 @@ class TestHardwareController(unittest.TestCase):
             for value in dikt['spec']['containers'][0]['env']:
                 os.system(f"export {value['name']}={value['value']}")
             importlib.reload(modelsettings)
-        self.assertEqual(len(output.getvalue().splitlines()), 200, output.getvalue())
+        self.assertEqual(len(output.getvalue().splitlines()), 232, output.getvalue())
 
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_generate_drone_plugin(self, output):
@@ -336,7 +336,7 @@ class TestHardwareController(unittest.TestCase):
                 os.system(f"export {value['name']}={value['value']}")
             importlib.reload(modelsettings)
         self.assertEqual(len(output.getvalue().splitlines()), 29, output.getvalue())
-        
+
     # test a required setting
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_bool_required(self, output):
