@@ -1,6 +1,7 @@
 """ ModelSettings
 """
 import configparser
+from distutils.util import strtobool
 import inspect
 import json
 import logging
@@ -109,9 +110,14 @@ class ModelSettings(object):
         parser.add_argument("--settings", action="store", dest='settings',
                             help="Specify a settings file. (ie settings.dev)")
         for key, value in self.spec.items():
-            if value['type'] in [str, bool, int, float]:
+            if value['type'] in [str, int, float]:
                 parser.add_argument(f"--{key.lower()}", action="store", dest=key,
                                     type=value['type'],
+                                    choices=value.get("choices"),
+                                    help=self.help(value))
+            elif value['type'] == bool:
+                parser.add_argument(f"--{key.lower()}", action="store", dest=key,
+                                    type=lambda x:bool(strtobool(x)),
                                     choices=value.get("choices"),
                                     help=self.help(value))
             elif value['type'] == list:
@@ -135,7 +141,7 @@ class ModelSettings(object):
 
         """
         for key, value in vars(args).items():
-            if value:
+            if value is not None:
                 setattr(self, key.upper(), value)
 
     def load_ini(self, ini_file):
