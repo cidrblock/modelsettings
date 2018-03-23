@@ -347,6 +347,10 @@ class ModelSettings(object):
         print("```")
         self.generate_kubernetes()
         print("```")
+        print("###  drone plugin")
+        print("```")
+        self.generate_drone_plugin()
+        print("```")
 
 
 
