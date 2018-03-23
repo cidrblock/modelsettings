@@ -5,9 +5,9 @@
 
 ## Overview
 
-Modelsetting is a straight-forward, easy to use python application settings manager that includes ini, environment variable, and command-line parameter support.
+Modelsettings is a straight-forward, easy to use python application settings manager that includes ini file, environment variable, and command-line parameter support.
 
-The necessary settings variables are declared in a yml model, which is then used to parse and .ini file, environment variables, and generate command-line arguments.
+The necessary settings variables are declared in a yaml model, which is then used to parse an .ini file, environment variables, and finally command-line arguments.
 
 In addition to reading settings from the three sources, modelsettings also includes sample configuration generator support for:
 - command-line
@@ -22,7 +22,7 @@ In addition to reading settings from the three sources, modelsettings also inclu
 
 ### Build the model
 
-Modelsettings looks for a `model_settings.yml` in the current working directory.  A simply `model_settings.yml` file might look like this:
+Modelsettings looks for a `model_settings.yml` in the current working directory.  A simple `model_settings.yml` file might look like this:
 
 ```
 env_prefix: CF
@@ -53,7 +53,7 @@ model:
     help: What size cup would you like in ounces?
     required: True
 ```
-`env_prefix` is used as a prefix for the environment variables, this helps avoid namespace collision when running multiple python applications in the same shell.
+`env_prefix` is used as a prefix for the environment variables, this helps avoid name collision when running multiple python applications in the same shell.
 
 `model` is a dictionary of required settings values.
 
@@ -111,7 +111,7 @@ optional arguments:
 
 ### `--generate`
 
-A command-line paramter of generate is added to the application which, when used, will generate sample settings in a number of formats.
+A command-line parameter of generate is added to the application which, when used, will generate sample settings in a number of formats.
 
 ```
 $ python app.py --generate env
