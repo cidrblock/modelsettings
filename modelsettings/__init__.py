@@ -19,8 +19,7 @@ class ModelSettings(object):
     """
     def __init__(self):
         self.log = logging.getLogger(self.__class__.__name__)
-        self.cwd = os.getcwd()
-
+        self.cwd = os.path.dirname(os.path.abspath((inspect.stack()[-1][1])))
         settings_file = os.environ.get("MODEL_SETTINGS",
                                        f"{self.cwd}/model_settings.yml")
         try:

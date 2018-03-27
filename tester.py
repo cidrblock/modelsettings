@@ -5,7 +5,6 @@ import logging
 
 
 
-# print(vars(settings))
 #
 # logging.basicConfig(level=logging.DEBUG)
 # logger = logging.getLogger('twelvesettings')
